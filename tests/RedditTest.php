@@ -32,7 +32,6 @@ class RedditTest extends TestCase
         $this->assertEquals($this->api->appId, 'reddit-json-api');
         $this->assertEquals($this->api->version, '1.0.0');
         $this->assertEquals($this->api->subreddit, 'funny');
-
     }
 
     public function testSubreddit()
