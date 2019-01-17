@@ -56,7 +56,7 @@ $beforePosts = $api->subreddit('memes')->before('id_here')->get();
 Sort by importance:
 ```php
 $hotPosts = $api->subreddit('memes')->hot()->get();
-``
+```
 
 Alternatively, you can sort like this:
 ```php
