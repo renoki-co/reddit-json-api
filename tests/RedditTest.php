@@ -55,7 +55,7 @@ class RedditTest extends TestCase
         );
     }
 
-    public function testAfter()
+    public function test_after()
     {
         $this->api->after('123');
 
@@ -64,7 +64,7 @@ class RedditTest extends TestCase
         );
     }
 
-    public function testBefore()
+    public function test_before()
     {
         $this->api->before('111');
 
