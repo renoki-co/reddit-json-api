@@ -2,7 +2,6 @@
 
 namespace Rennokki\RedditApi;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
