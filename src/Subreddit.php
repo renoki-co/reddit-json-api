@@ -71,7 +71,7 @@ class Subreddit
     ];
 
     /**
-     * Initialize a new class
+     * Initialize a new class.
      *
      * @param  string  $subreddit
      * @return void
