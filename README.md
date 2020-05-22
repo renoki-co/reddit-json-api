@@ -17,7 +17,95 @@ composer require rennokki/reddit-json-api
 ## 🙌 Usage
 
 ```php
-//
+use Rennokki\RedditApi\Reddit;
+
+$app = Reddit::app(
+    'renoki-co/reddit-json-api',
+    '2.0',
+    'web',
+    'someusername'
+);
+
+$subreddit = Reddit::subreddit(
+    'funny', // subreddit name
+    $app
+);
+
+$posts = $subreddit->get()['data']['children'] ?? [];
+```
+
+## Sorting
+
+Reddit allows sorting by posts type. The currently used ones are:
+
+```php
+public static $sorts = [
+    'hot', 'new', 'controversial', 'top', 'rising',
+];
+```
+
+To apply the sorting, you should call `sort()`:
+
+```php
+$subreddit = Reddit::subreddit('funny', $app);
+
+$subreddit->sort('top');
+```
+
+## Time Filtering
+
+Same as sorting, time filters are only a few:
+
+```php
+public static $times = [
+    'hour', 'day', 'week', 'month', 'year', 'all',
+];
+```
+
+```php
+$subreddit = Reddit::subreddit('funny', $app);
+
+// Top, all time sorting.
+$subreddit
+    ->sort('top')
+    ->time('all');
+```
+
+## Limit
+
+By default, each call gives you `20` posts.
+
+```php
+$subreddit = Reddit::subreddit('funny', $app);
+
+$subreddit->setLimit(100);
+```
+
+## Before & After tokens
+
+For paginating, you shall specify before & after from previous requests:
+
+```php
+$subreddit = Reddit::subreddit('funny', $app);
+
+$subreddit->before(...);
+
+$subreddit->after(...);
+```
+
+## Debugging
+
+If you wish to inspect the URL that is being called, you ca do so:
+
+```php
+$subreddit = Reddit::subreddit('funny', $app);
+
+$subreddit
+    ->setLimit(30)
+    ->sort('top')
+    ->time('week');
+
+$url = $subreddit->getCallableUrl();
 ```
 
 ## 🐛 Testing
