@@ -1,204 +1,177 @@
 <?php
 
-namespace Rennokki\RedditAPI\Test;
+namespace Rennokki\RedditApi\Test;
 
-use Rennokki\RedditAPI\RedditAPI;
+use Exception;
+use Rennokki\RedditApi\Reddit;
+use Rennokki\RedditApi\Subreddit;
 
 class RedditTest extends TestCase
 {
-    protected $api;
+    /**
+     * The API instance.
+     *
+     * @var \Rennokki\RedditApi\Subreddit
+     */
+    protected $subreddit;
 
-    public function setUp()
+    /**
+     * The App instance.
+     *
+     * @var \Rennokki\RedditApi\App
+     */
+    protected $app;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->api = (new RedditAPI())->platform('web')
-                                      ->appId('reddit-json-api')
-                                      ->version('1.0.0')
-                                      ->redditUsername('renodeer')
-                                      ->subreddit('funny');
+        $this->app = Reddit::app(
+            'renoki-co/reddit-json-api',
+            '2.0',
+            'web',
+            'someusername'
+        );
+
+        $this->api = Reddit::subreddit('funny', $this->app);
     }
 
-    public function testNoInitialization()
+    public function test_subreddit_json_name()
     {
-        $api = (new RedditAPI())->subreddit('funny');
-
-        $this->assertFalse($api->isInitialized());
+        $this->assertStringContainsString(
+            'funny.json', $this->api->getCallableUrl()
+        );
     }
 
-    public function testInitialization()
+    public function test_subreddit_limit()
     {
-        $this->assertEquals($this->api->platform, 'web');
-        $this->assertEquals($this->api->appId, 'reddit-json-api');
-        $this->assertEquals($this->api->version, '1.0.0');
-        $this->assertEquals($this->api->subreddit, 'funny');
-    }
+        $this->api->setLimit(100);
 
-    public function testSubreddit()
-    {
-        $this->assertEquals($this->api->subreddit, 'funny');
-        $this->assertContains('funny.json', $this->api->buildUrl());
-    }
-
-    public function testLimit()
-    {
-        $api = $this->api->limit(100);
-
-        $this->assertEquals($api->limit, 100);
-        $this->assertContains('limit=100', $api->buildUrl());
+        $this->assertStringContainsString(
+            'limit=100', $this->api->getCallableUrl()
+        );
     }
 
     public function testAfter()
     {
-        $api = $this->api->after('123');
+        $this->api->after('123');
 
-        $this->assertEquals($api->after, '123');
-        $this->assertContains('after=123', $api->buildUrl());
+        $this->assertStringContainsString(
+            'after=123', $this->api->getCallableUrl()
+        );
     }
 
     public function testBefore()
     {
-        $api = $this->api->before('111');
+        $this->api->before('111');
 
-        $this->assertEquals($api->before, '111');
-        $this->assertContains('before=111', $api->buildUrl());
+        $this->assertStringContainsString(
+            'before=111', $this->api->getCallableUrl()
+        );
     }
 
-    public function testGoodSort()
+    public function test_sort_filtering()
     {
-        foreach (RedditAPI::$sorts as $sort) {
-            $api = $this->api->sort($sort);
+        foreach (Subreddit::$sorts as $sort) {
+            $this->api->sort($sort);
 
-            $this->assertEquals($api->sort, $sort);
-            $this->assertContains($sort.'.json', $api->buildUrl());
+            $this->assertStringContainsString(
+                "{$sort}.json", $this->api->getCallableUrl()
+            );
         }
 
-        foreach (RedditAPI::$sorts as $sort) {
-            $api = $this->api->{$sort}();
+        $this->api->sort('bad');
 
-            $this->assertEquals($api->sort, $sort);
-            $this->assertContains($sort.'.json', $api->buildUrl());
-        }
+        $this->assertStringNotContainsString(
+            'bad.json', $this->api->getCallableUrl()
+        );
     }
 
-    public function testBadSort()
+    public function test_time_filtering()
     {
-        $api = $this->api->sort('bad');
+        $this->api->sort('controversial');
 
-        $this->assertNull($api->sort);
-        $this->assertNotContains('bad.json', $api->buildUrl());
-    }
+        foreach (Subreddit::$times as $time) {
+            $this->api->time($time);
 
-    public function testSortShowingTimeWithTopOrControversial()
-    {
-        foreach (RedditAPI::$sorts as $sort) {
-            $api = $this->api->sort($sort);
-
-            if (in_array($sort, ['top', 'controversial'])) {
-                $this->assertContains('?t='.$api->time, $api->buildUrl());
-            } else {
-                $this->assertNotContains('?t='.$api->time, $api->buildUrl());
-            }
-        }
-    }
-
-    public function testGoodTime()
-    {
-        $api = $this->api->controversial();
-
-        foreach (RedditAPI::$times as $time) {
-            $api = $this->api->time($time);
-
-            $this->assertEquals($api->time, $time);
-            $this->assertContains('?t='.$time, $api->buildUrl());
+            $this->assertStringContainsString(
+                "?t={$time}", $this->api->getCallableUrl()
+            );
         }
 
-        foreach (RedditAPI::$times as $time) {
-            $api = $this->api->{$time}();
+        $this->api->sort('top');
 
-            $this->assertEquals($api->time, $time);
-            $this->assertContains('?t='.$time, $api->buildUrl());
+        foreach (Subreddit::$times as $time) {
+            $this->api->time($time);
+
+            $this->assertStringContainsString(
+                "?t={$time}", $this->api->getCallableUrl()
+            );
         }
 
-        $api = $this->api->top();
+        $this
+            ->api
+            ->sort('controversial')
+            ->time('bad');
 
-        foreach (RedditAPI::$times as $time) {
-            $api = $this->api->time($time);
+        $this->assertStringNotContainsString(
+            '?t=bad', $this->api->getCallableUrl()
+        );
 
-            $this->assertEquals($api->time, $time);
-            $this->assertContains('?t='.$time, $api->buildUrl());
-        }
-
-        foreach (RedditAPI::$times as $time) {
-            $api = $this->api->{$time}();
-
-            $this->assertEquals($api->time, $time);
-            $this->assertContains('?t='.$time, $api->buildUrl());
-        }
+        $this->assertStringContainsString(
+            '?t=all', $this->api->getCallableUrl()
+        );
     }
 
-    public function testBadTime()
-    {
-        $api = $this->api->controversial()->time('bad');
-
-        $this->assertEquals($api->time, 'all');
-        $this->assertNotContains('?t=bad', $api->buildUrl());
-        $this->assertContains('?t=all', $api->buildUrl());
-
-        $api = $this->api->top()->time('bad');
-
-        $this->assertEquals($api->time, 'all');
-        $this->assertNotContains('?t=bad', $api->buildUrl());
-        $this->assertContains('?t=all', $api->buildUrl());
-    }
-
-    public function testClears()
-    {
-        $this->assertEquals($this->api->time('all')->clearTime()->time, 'all');
-        $this->assertNull($this->api->sort('top')->clearSort()->sort);
-        $this->assertNull($this->api->after('123')->clearAfter()->after);
-        $this->assertNull($this->api->before('123')->clearBefore()->before);
-    }
-
-    public function testNoInitializationRequest()
+    public function test_top()
     {
         try {
-            (new RedditAPI())->subreddit('funny')->get();
-        } catch (\Exception $e) {
-            $this->assertTrue(true);
-        }
-    }
-
-    public function testHot()
-    {
-        try {
-            $data = $this->api->hot()->get();
-        } catch (\Exception $e) {
+            $data = $this
+                ->api
+                ->sort('hot')
+                ->get();
+        } catch (Exception $e) {
             return $this->assertFalse(true);
         }
 
-        $this->assertTrue(count($data->data->children) > 1);
+        $this->assertTrue(
+            count($data['data']['children']) > 1
+        );
     }
 
-    public function testTop()
+    public function test_hot()
     {
         try {
-            $data = $this->api->top()->all()->get();
-        } catch (\Exception $e) {
+            $data = $this
+                ->api
+                ->sort('top')
+                ->time('all')
+                ->get();
+        } catch (Exception $e) {
             return $this->assertFalse(true);
         }
 
-        $this->assertTrue(count($data->data->children) > 1);
+        $this->assertTrue(
+            count($data['data']['children']) > 1
+        );
     }
 
-    public function testNew()
+    public function test_new()
     {
         try {
-            $data = $this->api->new()->get();
-        } catch (\Exception $e) {
+            $data = $this
+                ->api
+                ->sort('new')
+                ->get();
+        } catch (Exception $e) {
             return $this->assertFalse(true);
         }
 
-        $this->assertTrue(count($data->data->children) > 1);
+        $this->assertTrue(
+            count($data['data']['children']) > 1
+        );
     }
 }

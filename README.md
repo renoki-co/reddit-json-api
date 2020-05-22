@@ -19,15 +19,15 @@ $ composer require rennokki/reddit-json-api
 
 If you are using Laravel and your Laravel version does not support package discovery, add this line in the `providers` array in your `config/app.php` file:
 ```php
-Rennokki\RedditAPI\RedditAPIServiceProvider::class,
+Rennokki\RedditApi\RedditApiServiceProvider::class,
 ```
 
 # Setting up the API
 This kind of API does not need credentials. The only things you need is to specify an User Agent for your requests. This can be done easy:
 ```php
-use Rennokki\RedditAPI\RedditAPI;
+use Rennokki\RedditApi\RedditApi;
 
-$api = (new RedditAPI())->platform('web')
+$api = (new RedditApi())->platform('web')
                         ->appId('my-awesome-app')
                         ->version('1.0.0-beta')
                         ->redditUsername('myRedditUsername');
@@ -105,3 +105,20 @@ $api->clearAfter()->...;
 $api->clearSort()->...;
 $api->clearTime()->...; // this reverts to default: 'all'
 ```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security
+
+If you discover any security related issues, please email alex@renoki.org instead of using the issue tracker.
+
+## Credits
+
+- [Alex Renoki](https://github.com/rennokki)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
