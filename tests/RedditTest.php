@@ -2,8 +2,8 @@
 
 namespace Rennokki\RedditApi\Test;
 
-use Exception;
 use Rennokki\RedditApi\Reddit;
+use  Rennokki\RedditApi\RedditList;
 use Rennokki\RedditApi\Subreddit;
 
 class RedditTest extends TestCase
@@ -64,15 +64,6 @@ class RedditTest extends TestCase
         );
     }
 
-    public function test_before()
-    {
-        $this->api->before('111');
-
-        $this->assertStringContainsString(
-            'before=111', $this->api->getCallableUrl()
-        );
-    }
-
     public function test_sort_filtering()
     {
         foreach (Subreddit::$sorts as $sort) {
@@ -128,50 +119,66 @@ class RedditTest extends TestCase
 
     public function test_top()
     {
-        try {
-            $data = $this
-                ->api
-                ->sort('hot')
-                ->get();
-        } catch (Exception $e) {
-            return $this->assertFalse(true);
-        }
+        $posts = $this
+            ->api
+            ->sort('hot')
+            ->get();
 
-        $this->assertTrue(
-            count($data['data']['children']) > 1
-        );
+        $this->assertInstanceOf(RedditList::class, $posts);
+
+        $this->assertCount(22, $posts);
+
+        foreach ($posts as $post) {
+            $this->assertNotNull($post['permalink'] ?? null);
+        }
     }
 
     public function test_hot()
     {
-        try {
-            $data = $this
-                ->api
-                ->sort('top')
-                ->time('all')
-                ->get();
-        } catch (Exception $e) {
-            return $this->assertFalse(true);
-        }
+        $posts = $this
+            ->api
+            ->sort('top')
+            ->time('all')
+            ->get();
 
-        $this->assertTrue(
-            count($data['data']['children']) > 1
-        );
+        $this->assertInstanceOf(RedditList::class, $posts);
+
+        $this->assertCount(20, $posts);
+
+        foreach ($posts as $post) {
+            $this->assertNotNull($post['permalink'] ?? null);
+        }
     }
 
     public function test_new()
     {
-        try {
-            $data = $this
-                ->api
-                ->sort('new')
-                ->get();
-        } catch (Exception $e) {
-            return $this->assertFalse(true);
-        }
+        $posts = $this
+            ->api
+            ->sort('new')
+            ->get();
 
-        $this->assertTrue(
-            count($data['data']['children']) > 1
-        );
+        $this->assertInstanceOf(RedditList::class, $posts);
+
+        $this->assertCount(20, $posts);
+
+        foreach ($posts as $post) {
+            $this->assertNotNull($post['permalink'] ?? null);
+        }
+    }
+
+    public function test_next_page()
+    {
+        $posts = $this
+            ->api
+            ->sort('new')
+            ->get();
+
+        $firstPageAfter = $posts->getAfter();
+
+        $posts = $posts->nextPage();
+
+        $secondPageAfter = $posts->getAfter();
+
+        $this->assertNotEquals($firstPageAfter, $secondPageAfter);
     }
 }
