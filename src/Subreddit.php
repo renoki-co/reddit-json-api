@@ -77,7 +77,7 @@ class Subreddit
     /**
      * Set the after token.
      *
-     * @param  string  $before
+     * @param  string|null  $after
      * @return $this
      */
     public function after(string $after)
