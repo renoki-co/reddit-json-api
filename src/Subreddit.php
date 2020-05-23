@@ -80,7 +80,7 @@ class Subreddit
      * @param  string|null  $after
      * @return $this
      */
-    public function after(string $after)
+    public function after($after)
     {
         $this->after = $after;
 
@@ -153,7 +153,17 @@ class Subreddit
             );
         }
 
-        return @json_decode($request->getBody(), true);
+        $response = @json_decode($request->getBody(), true);
+
+        $posts = collect($response['data']['children'])
+            ->pluck('data')
+            ->toArray();
+
+        dump($this->getCallableUrl());
+
+        return (new RedditList($posts))
+            ->setSubreddit($this)
+            ->setAfter($response['data']['after'] ?? null);
     }
 
     /**
