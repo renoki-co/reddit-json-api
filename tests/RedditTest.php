@@ -2,7 +2,6 @@
 
 namespace Rennokki\RedditApi\Test;
 
-use Exception;
 use Rennokki\RedditApi\Reddit;
 use  Rennokki\RedditApi\RedditList;
 use Rennokki\RedditApi\Subreddit;

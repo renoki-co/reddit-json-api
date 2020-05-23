@@ -49,7 +49,7 @@ class RedditList extends Collection
     }
 
     /**
-     * Get the next page of results
+     * Get the next page of results.
      *
      * @return \Rennokki\RedditApi\RedditList
      */
