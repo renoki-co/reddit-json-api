@@ -159,8 +159,6 @@ class Subreddit
             ->pluck('data')
             ->toArray();
 
-        dump($this->getCallableUrl());
-
         return (new RedditList($posts))
             ->setSubreddit($this)
             ->setAfter($response['data']['after'] ?? null);
