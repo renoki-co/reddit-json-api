@@ -81,14 +81,12 @@ $subreddit = Reddit::subreddit('funny', $app);
 $subreddit->setLimit(100);
 ```
 
-## Before & After tokens
+## After tokens
 
-For paginating, you shall specify before & after from previous requests:
+For paginating, you shall specify after from previous requests:
 
 ```php
 $subreddit = Reddit::subreddit('funny', $app);
-
-$subreddit->before(...);
 
 $subreddit->after(...);
 ```

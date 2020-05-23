@@ -64,15 +64,6 @@ class RedditTest extends TestCase
         );
     }
 
-    public function test_before()
-    {
-        $this->api->before('111');
-
-        $this->assertStringContainsString(
-            'before=111', $this->api->getCallableUrl()
-        );
-    }
-
     public function test_sort_filtering()
     {
         foreach (Subreddit::$sorts as $sort) {

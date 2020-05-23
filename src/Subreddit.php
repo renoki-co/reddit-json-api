@@ -22,13 +22,6 @@ class Subreddit
     protected $after = null;
 
     /**
-     * The `before` token for pagination.
-     *
-     * @return string|null
-     */
-    protected $before = null;
-
-    /**
      * The limit on each page.
      * An `after` is passed by the API
      * to retrieve the next page.
@@ -90,19 +83,6 @@ class Subreddit
     public function after(string $after)
     {
         $this->after = $after;
-
-        return $this;
-    }
-
-    /**
-     * Set the before token.
-     *
-     * @param  string  $before
-     * @return $this
-     */
-    public function before(string $before)
-    {
-        $this->before = $before;
 
         return $this;
     }
@@ -201,10 +181,6 @@ class Subreddit
 
         if ($this->after) {
             $parameters['after'] = $this->after;
-        }
-
-        if ($this->before) {
-            $parameters['before'] = $this->before;
         }
 
         $query = http_build_query($parameters);
