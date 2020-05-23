@@ -31,7 +31,25 @@ $subreddit = Reddit::subreddit(
     $app
 );
 
-$posts = $subreddit->get()['data']['children'] ?? [];
+$posts = $subreddit->get();
+
+foreach ($posts as $post) {
+    $id = $post['id'];
+}
+```
+
+When retrieving posts, the results are wrapped in a `Rennokki\RedditApi\RedditList` class. This class is based on Laravel Collection and you can pipeline actions on it more easily. Please see [Laravel Collections documentantion](https://laravel.com/docs/master/collections).
+
+## Pagination
+
+For pagination purposes, you shall call `nextPage()` from the previous `$posts`:
+
+```php
+$subreddit = Reddit::subreddit('funny', $app);
+
+$posts = $subreddit->get();
+
+$nextPageOfPosts = $posts->nextPage();
 ```
 
 ## Sorting
@@ -79,16 +97,6 @@ By default, each call gives you `20` posts.
 $subreddit = Reddit::subreddit('funny', $app);
 
 $subreddit->setLimit(100);
-```
-
-## After tokens
-
-For paginating, you shall specify after from previous requests:
-
-```php
-$subreddit = Reddit::subreddit('funny', $app);
-
-$subreddit->after(...);
 ```
 
 ## Debugging
