@@ -126,7 +126,7 @@ class RedditTest extends TestCase
 
         $this->assertInstanceOf(RedditList::class, $posts);
 
-        $this->assertCount(22, $posts);
+        $this->assertCount(21, $posts);
 
         foreach ($posts as $post) {
             $this->assertNotNull($post['permalink'] ?? null);
