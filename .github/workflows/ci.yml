@@ -34,7 +34,7 @@ jobs:
           - laravel: '8.*'
             testbench: '6.*'
 
-    name: PHP ${{ matrix.php }} - Laravel $ {{ matrix.laravel }} --${{ matrix.prefer }}
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} --${{ matrix.prefer }}
 
     steps:
     - uses: actions/checkout@v1
