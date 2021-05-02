@@ -133,7 +133,7 @@ class Subreddit
     /**
      * Call the API to get the response as array.
      *
-     * @return array|null
+     * @return \Rennokki\RedditApi\RedditList
      */
     public function get()
     {
