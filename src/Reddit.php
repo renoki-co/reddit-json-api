@@ -8,8 +8,8 @@ class Reddit
      * Create a new Subreddit instance.
      *
      * @param  string  $subreddit
-     * @return \Rennokki\RedditApi\Subreddit
      * @param  \Rennokki\RedditApi\App  $app
+     * @return \Rennokki\RedditApi\Subreddit
      */
     public static function subreddit(string $subreddit, App $app)
     {

@@ -11,6 +11,7 @@ class App
      * to the User Agent.
      *
      * @see https://github.com/reddit-archive/reddit/wiki/API#rules
+     *
      * @var mixed
      */
     protected $platform;
@@ -20,6 +21,7 @@ class App
      * to the User Agent.
      *
      * @see https://github.com/reddit-archive/reddit/wiki/API#rules
+     *
      * @var mixed
      */
     protected $appId;
@@ -29,6 +31,7 @@ class App
      * to the User Agent.
      *
      * @see https://github.com/reddit-archive/reddit/wiki/API#rules
+     *
      * @var mixed
      */
     protected $version;
