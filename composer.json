@@ -2,7 +2,11 @@
     "name": "rennokki/reddit-json-api",
     "description": "Reddit JSON API offers an easy way to retrieve data from subreddits in no time.",
     "keywords": [
-        "reddit", "json", "api", "laravel", "wrapper"
+        "reddit",
+        "json",
+        "api",
+        "laravel",
+        "wrapper"
     ],
     "homepage": "https://github.com/renoki-co/reddit-json-api",
     "license": "Apache-2.0",
@@ -15,14 +19,15 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "guzzlehttp/guzzle": "^6.5|^7.0",
-        "illuminate/support": "^7.30|^8.23"
+        "illuminate/support": "^8.83|^9.0.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
-        "orchestra/testbench": "^6.24.0",
-        "phpunit/phpunit": "^9.0"
+        "orchestra/testbench": "^6.28|^7.0",
+        "orchestra/testbench-core": "^6.28|^7.0",
+        "phpunit/phpunit": "^9.5.13"
     },
     "autoload": {
         "psr-4": {
