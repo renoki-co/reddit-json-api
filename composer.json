@@ -21,7 +21,7 @@
     "require": {
         "php": "^8.0",
         "guzzlehttp/guzzle": "^6.5|^7.0",
-        "illuminate/support": "^8.83|^9.0.1|^10.1"
+        "illuminate/support": "^8.83|^9.0.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
