@@ -21,13 +21,13 @@
     "require": {
         "php": "^8.0",
         "guzzlehttp/guzzle": "^6.5|^7.0",
-        "illuminate/support": "^8.83|^9.0.1"
+        "illuminate/support": "^8.83|^9.0.1|^10.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
-        "orchestra/testbench": "^6.28|^7.0",
-        "orchestra/testbench-core": "^6.28|^7.0",
-        "phpunit/phpunit": "^9.5.21"
+        "orchestra/testbench": "^6.28|^7.0|^8.0",
+        "orchestra/testbench-core": "^6.28|^7.0|^8.0",
+        "phpunit/phpunit": "^9.5.21|^10.0"
     },
     "autoload": {
         "psr-4": {
@@ -45,5 +45,6 @@
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
